@@ -1,4 +1,65 @@
 const GRID = 8;
+
+// ---- SOUND ENGINE (Web Audio API) ----
+let audioCtx = null;
+function getAudio() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, duration, type, vol, delay) {
+  try {
+    const ctx = getAudio();
+    const t = ctx.currentTime + (delay || 0);
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, t);
+    gain.gain.setValueAtTime(vol || 0.15, t);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + duration);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(t);
+    osc.stop(t + duration);
+  } catch(e) {}
+}
+
+function sfxPlace() {
+  playTone(440, 0.08, 'sine', 0.12);
+  playTone(660, 0.08, 'sine', 0.08, 0.04);
+}
+
+function sfxClear(lines) {
+  // Rising arpeggio — more notes for more lines
+  const notes = [523, 659, 784, 988, 1175];
+  const count = Math.min(lines + 2, notes.length);
+  for (let i = 0; i < count; i++) {
+    playTone(notes[i], 0.15, 'sine', 0.12, i * 0.07);
+  }
+  // Shimmer
+  playTone(1568, 0.3, 'triangle', 0.06, count * 0.07);
+}
+
+function sfxCombo() {
+  // Big fanfare
+  const notes = [523, 659, 784, 1047, 1319, 1568];
+  notes.forEach((n, i) => playTone(n, 0.2, 'sine', 0.1, i * 0.06));
+  playTone(1568, 0.5, 'triangle', 0.08, notes.length * 0.06);
+  playTone(2093, 0.4, 'sine', 0.05, notes.length * 0.06 + 0.1);
+}
+
+function sfxGameOver() {
+  // Descending sad tones
+  playTone(440, 0.3, 'sine', 0.12);
+  playTone(370, 0.3, 'sine', 0.1, 0.25);
+  playTone(311, 0.3, 'sine', 0.08, 0.5);
+  playTone(261, 0.6, 'triangle', 0.1, 0.75);
+}
+
+function sfxClick() {
+  playTone(800, 0.05, 'square', 0.06);
+}
+
 const THEMES = {
   classic: {
     colors: ['red', 'green', 'blue'],
@@ -202,8 +263,9 @@ document.querySelectorAll('.theme-btn').forEach(btn => {
   });
 });
 
-playBtn.addEventListener('click', startGame);
+playBtn.addEventListener('click', () => { sfxClick(); startGame(); });
 restartBtn.addEventListener('click', () => {
+  sfxClick();
   overlayEl.classList.remove('show');
   startGame();
 });
@@ -505,6 +567,7 @@ function placePiece(piece, sr, sc) {
   piece.shape.forEach(row => row.forEach(v => { if (v) cellCount++; }));
   score += cellCount;
   moves++;
+  sfxPlace();
 
   currentPieces[piece.index] = null;
   refreshTray();
@@ -534,6 +597,10 @@ function clearLines() {
 
   const totalLines = rowsToClear.length + colsToClear.length;
   if (totalLines === 0) return;
+
+  // Sound
+  if (totalLines > 1) sfxCombo();
+  else sfxClear(totalLines);
 
   score += totalLines * GRID;
   if (totalLines > 1) score += totalLines * 10;
@@ -600,6 +667,7 @@ function checkGameOver() {
   const anyFits = remaining.some(p => canPlaceAnywhere(p.shape));
 
   if (!anyFits) {
+    sfxGameOver();
     bestScore = Math.max(bestScore, score);
     localStorage.setItem('blockPuzzleBest', bestScore);
     finalScoreEl.textContent = score;
