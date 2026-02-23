@@ -1,5 +1,5 @@
-const CACHE = 'block-puzzle-v1';
-const ASSETS = ['./index.html', './game.js', './icon.svg', './manifest.json'];
+const CACHE = 'block-puzzle-v2';
+const ASSETS = ['./index.html', './game.js', './styles.css', './icon.svg', './manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));

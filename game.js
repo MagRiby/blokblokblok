@@ -45,6 +45,22 @@ const THEMES = {
       'neon-purple': { bg: '#d500f9', shadow: 'inset 0 -3px 0 #aa00c7, 0 0 8px rgba(213,0,249,0.5)' },
       'neon-green':  { bg: '#00e676', shadow: 'inset 0 -3px 0 #00c853, 0 0 8px rgba(0,230,118,0.5)' }
     }
+  },
+  moroccan: {
+    colors: ['zellige-teal', 'zellige-gold', 'zellige-cobalt', 'zellige-terracotta', 'zellige-cream'],
+    clearMessages: ['✦ Zwin!', '🌙 Mezyan!', '✦ Hamdulillah!', '🕌 Magnifique!', '✦ Baraka!', '🌟 Mashallah!', '✦ Superbe!'],
+    comboMessages: ['✦✦ DOUBLE ZELLIGE!', '🌙🌙 RIAD COMBO!', '✦✦ MOSAIC MASTER!', '🕌🕌 MEDINA MAGIC!'],
+    particleColors: ['#C17F3E', '#1B6B5A', '#2E4057', '#C75B39', '#F5E6D0', '#D4944F', '#238B74', '#A06830'],
+    menuPattern: ['zellige-teal','zellige-gold','empty','zellige-cobalt','empty','zellige-terracotta','zellige-teal','empty','zellige-gold','empty','zellige-cobalt','zellige-terracotta','zellige-cobalt','zellige-teal','empty','zellige-gold'],
+    menuTitle: '✦ Zellige Blocks',
+    menuSubtitle: 'Mosaic your way to glory.',
+    ghostColors: {
+      'zellige-teal':      { bg: '#1B6B5A', shadow: 'inset 0 -3px 0 #145A4A, inset 0 2px 0 #2AA88D' },
+      'zellige-gold':      { bg: '#C17F3E', shadow: 'inset 0 -3px 0 #A06830, inset 0 2px 0 #DBA86A' },
+      'zellige-cobalt':    { bg: '#2E4057', shadow: 'inset 0 -3px 0 #1E2D3D, inset 0 2px 0 #4A7099' },
+      'zellige-terracotta':{ bg: '#C75B39', shadow: 'inset 0 -3px 0 #A04428, inset 0 2px 0 #E89B7A' },
+      'zellige-cream':     { bg: '#F5E6D0', shadow: 'inset 0 -3px 0 #D4C4A8, inset 0 2px 0 #FFFAF0' }
+    }
   }
 };
 
@@ -155,11 +171,9 @@ function initMenu() {
 }
 
 function applyTheme() {
-  document.body.classList.remove('kawaii', 'cyber');
-  if (currentTheme === 'kawaii') document.body.classList.add('kawaii');
-  if (currentTheme === 'cyber') document.body.classList.add('cyber');
+  document.body.classList.remove('kawaii', 'cyber', 'moroccan');
+  if (currentTheme !== 'classic') document.body.classList.add(currentTheme);
 
-  // Update theme button states
   document.querySelectorAll('.theme-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.theme === currentTheme);
   });
