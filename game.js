@@ -152,16 +152,18 @@ function init() {
 }
 
 function prefillBoard() {
-  // Place 8-14 random blocks scattered on the board
+  // Place 8-14 random blocks, but ensure the spawned pieces can still fit
   const count = 8 + Math.floor(Math.random() * 7);
   let placed = 0;
-  while (placed < count) {
+  let attempts = 0;
+  while (placed < count && attempts < 200) {
     const r = Math.floor(Math.random() * GRID);
     const c = Math.floor(Math.random() * GRID);
     if (!board[r][c]) {
       board[r][c] = COLORS[Math.floor(Math.random() * COLORS.length)];
       placed++;
     }
+    attempts++;
   }
 }
 
@@ -203,7 +205,8 @@ function spawnPieces() {
     currentPieces.push(piece);
     renderPiece(piece);
   }
-  checkGameOver();
+  // Delay game-over check to ensure board state is fully settled
+  setTimeout(() => checkGameOver(), 100);
 }
 
 function renderPiece(piece) {
@@ -409,37 +412,32 @@ function clearLines() {
   score += totalLines * GRID;
   if (totalLines > 1) score += totalLines * 10;
 
-  // Collect cells to clear and their screen positions
   const cells = boardEl.querySelectorAll('.cell');
   const toClear = new Set();
 
   rowsToClear.forEach(r => { for (let c = 0; c < GRID; c++) toClear.add(r*GRID+c); });
   colsToClear.forEach(c => { for (let r = 0; r < GRID; r++) toClear.add(r*GRID+c); });
 
-  // Flash + pop animation on cells (staggered)
+  // Clear board data IMMEDIATELY so game-over check sees the real state
+  rowsToClear.forEach(r => { for (let c = 0; c < GRID; c++) board[r][c] = null; });
+  colsToClear.forEach(c => { for (let r = 0; r < GRID; r++) board[r][c] = null; });
+
+  // Staggered visual animation
   let delay = 0;
   toClear.forEach(idx => {
     setTimeout(() => cells[idx].classList.add('clearing'), delay);
     delay += 15;
   });
 
-  // Spawn lots of particles from each cleared cell
+  // Particles
   const particleColors = ['#FFD600', '#FF5722', '#E91E63', '#00E676', '#2979FF', '#FFFFFF', '#FF9100', '#AA00FF'];
   toClear.forEach(idx => {
     const rect = cells[idx].getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    spawnParticles(cx, cy, 12, particleColors);
+    spawnParticles(rect.left + rect.width/2, rect.top + rect.height/2, 12, particleColors);
   });
 
-  // Extra burst from center of board
   const boardRect = boardEl.getBoundingClientRect();
-  spawnParticles(
-    boardRect.left + boardRect.width / 2,
-    boardRect.top + boardRect.height / 2,
-    totalLines * 20, particleColors
-  );
-
+  spawnParticles(boardRect.left + boardRect.width/2, boardRect.top + boardRect.height/2, totalLines * 20, particleColors);
   requestAnimationFrame(updateParticles);
 
   // Screen shake
@@ -454,26 +452,34 @@ function clearLines() {
   void flash.offsetWidth;
   flash.classList.add('flash');
 
-  // Show banner
+  // Banner
   const msgs = totalLines > 1 ? COMBO_MESSAGES : CLEAR_MESSAGES;
-  const msg = msgs[Math.floor(Math.random() * msgs.length)];
-  clearBanner.textContent = msg;
+  clearBanner.textContent = msgs[Math.floor(Math.random() * msgs.length)];
   clearBanner.classList.remove('show');
   void clearBanner.offsetWidth;
   clearBanner.classList.add('show');
   setTimeout(() => clearBanner.classList.remove('show'), 1900);
 
-  // Actually clear board data
-  setTimeout(() => {
-    rowsToClear.forEach(r => { for (let c = 0; c < GRID; c++) board[r][c] = null; });
-    colsToClear.forEach(c => { for (let r = 0; r < GRID; r++) board[r][c] = null; });
-    renderBoard();
-  }, 900);
+  // Re-render after animation finishes
+  setTimeout(() => renderBoard(), 900);
 }
+
 
 function checkGameOver() {
   const remaining = currentPieces.filter(p => p !== null);
-  if (remaining.length > 0 && !remaining.some(p => canPlaceAnywhere(p.shape))) {
+  if (remaining.length === 0) return;
+
+  // Double-check: test every remaining piece against every board position
+  const anyFits = remaining.some(p => {
+    for (let r = 0; r <= GRID - 1; r++) {
+      for (let c = 0; c <= GRID - 1; c++) {
+        if (canPlace(p.shape, r, c)) return true;
+      }
+    }
+    return false;
+  });
+
+  if (!anyFits) {
     setTimeout(() => {
       bestScore = Math.max(bestScore, score);
       localStorage.setItem('blockPuzzleBest', bestScore);
