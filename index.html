@@ -237,7 +237,7 @@ document.addEventListener('gesturechange', e => e.preventDefault());
 #pieces-tray {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 16px;
   width: 100%;
   min-height: 130px;
   align-items: center;
@@ -246,18 +246,18 @@ document.addEventListener('gesturechange', e => e.preventDefault());
 .piece-container {
   cursor: grab;
   display: grid;
-  gap: 1px;
+  gap: 2px;
   padding: 6px;
   border-radius: 6px;
   transition: transform 0.15s, opacity 0.15s;
 }
 .piece-container:active { cursor: grabbing; }
 .piece-container.dragging { opacity: 0.5; transform: scale(0.9); }
-.piece-cell { width: 32px; height: 32px; border-radius: 4px; }
-.piece-cell.filled.red { background: #F44336; box-shadow: inset 0 -2px 0 #C62828, inset 0 1px 0 #EF5350; }
-.piece-cell.filled.green { background: #4CAF50; box-shadow: inset 0 -2px 0 #2E7D32, inset 0 1px 0 #66BB6A; }
-.piece-cell.filled.blue { background: #2196F3; box-shadow: inset 0 -2px 0 #1565C0, inset 0 1px 0 #42A5F5; }
-.piece-cell.empty { background: transparent; }
+.piece-cell { width: 32px; height: 32px; border-radius: 5px; }
+.piece-cell.filled.red { background: #F44336; box-shadow: inset 0 -3px 0 #C62828, inset 0 2px 0 #EF5350; }
+.piece-cell.filled.green { background: #4CAF50; box-shadow: inset 0 -3px 0 #2E7D32, inset 0 2px 0 #66BB6A; }
+.piece-cell.filled.blue { background: #2196F3; box-shadow: inset 0 -3px 0 #1565C0, inset 0 2px 0 #42A5F5; }
+.piece-cell.empty { background: transparent; width: 32px; height: 32px; }
 
 /* Game Over */
 #game-over-overlay {
