@@ -257,8 +257,8 @@ function renderPiece(piece) {
   const rows = piece.shape.length, cols = piece.shape[0].length;
   const container = document.createElement('div');
   container.classList.add('piece-container');
-  container.style.gridTemplateColumns = `repeat(${cols}, 18px)`;
-  container.style.gridTemplateRows = `repeat(${rows}, 18px)`;
+  container.style.gridTemplateColumns = `repeat(${cols}, 32px)`;
+  container.style.gridTemplateRows = `repeat(${rows}, 32px)`;
   container.dataset.index = piece.index;
 
   for (let r = 0; r < rows; r++) {
