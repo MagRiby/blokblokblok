@@ -17,45 +17,130 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* ---- ANIMATED BACKGROUND ---- */
-#bg-anim {
-  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
-}
-#bg-anim .orb {
-  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.3;
-  animation: orbFloat 12s ease-in-out infinite alternate;
-}
-#bg-anim .orb:nth-child(1) { width: 300px; height: 300px; background: #42A5F5; top: -50px; left: -50px; animation-delay: 0s; }
-#bg-anim .orb:nth-child(2) { width: 250px; height: 250px; background: #1565C0; bottom: -40px; right: -40px; animation-delay: -4s; }
-#bg-anim .orb:nth-child(3) { width: 200px; height: 200px; background: #64B5F6; top: 40%; left: 60%; animation-delay: -8s; }
-@keyframes orbFloat {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(40px, -30px) scale(1.1); }
-  66% { transform: translate(-30px, 40px) scale(0.9); }
-  100% { transform: translate(20px, 20px) scale(1.05); }
-}
-body.kawaii #bg-anim .orb:nth-child(1) { background: #F48FB1; }
-body.kawaii #bg-anim .orb:nth-child(2) { background: #CE93D8; }
-body.kawaii #bg-anim .orb:nth-child(3) { background: #FFAB91; }
-body.cyber #bg-anim .orb { filter: blur(100px); opacity: 0.15; }
-body.cyber #bg-anim .orb:nth-child(1) { background: #0ff; }
-body.cyber #bg-anim .orb:nth-child(2) { background: #f0f; }
-body.cyber #bg-anim .orb:nth-child(3) { background: #00e676; }
-body.moroccan #bg-anim .orb:nth-child(1) { background: #C17F3E; }
-body.moroccan #bg-anim .orb:nth-child(2) { background: #1B6B5A; }
-body.moroccan #bg-anim .orb:nth-child(3) { background: #2E4057; }
-
 body {
-  background: #2979FF;
+  background: linear-gradient(-45deg, #1565C0, #2979FF, #42A5F5, #1E88E5);
+  background-size: 400% 400%;
+  animation: bgShift 15s ease infinite;
   display: flex; justify-content: center; align-items: center;
   min-height: 100vh; font-family: 'Segoe UI', Arial, sans-serif;
   overflow: hidden; touch-action: manipulation; user-select: none;
   -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; -webkit-user-select: none;
   position: relative;
 }
+@keyframes bgShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+body.kawaii {
+  background: linear-gradient(-45deg, #FFB6C1, #DDA0DD, #E6E6FA, #F8BBD0, #FFCDD2);
+  background-size: 400% 400%;
+  animation: bgShift 15s ease infinite;
+}
+body.cyber {
+  background: linear-gradient(-45deg, #0a0a1a, #1a0a2e, #0d1b2a, #120025, #0a1628);
+  background-size: 400% 400%;
+  animation: bgShift 20s ease infinite;
+}
+body.moroccan {
+  background: linear-gradient(-45deg, #F5E6D0, #E8D5B7, #F0DCC0, #FAEBD7, #E5D0B0);
+  background-size: 400% 400%;
+  animation: bgShift 18s ease infinite;
+}
+
+/* Floating orbs */
+#bg-anim {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+#bg-anim .orb {
+  position: absolute; border-radius: 50%; opacity: 0.25;
+}
+#bg-anim .orb:nth-child(1) {
+  width: 400px; height: 400px; background: radial-gradient(circle, #42A5F5 0%, transparent 70%);
+  top: -100px; left: -80px; animation: orb1 16s ease-in-out infinite;
+}
+#bg-anim .orb:nth-child(2) {
+  width: 350px; height: 350px; background: radial-gradient(circle, #1565C0 0%, transparent 70%);
+  bottom: -80px; right: -60px; animation: orb2 20s ease-in-out infinite;
+}
+#bg-anim .orb:nth-child(3) {
+  width: 250px; height: 250px; background: radial-gradient(circle, #64B5F6 0%, transparent 70%);
+  top: 35%; left: 55%; animation: orb3 14s ease-in-out infinite;
+}
+#bg-anim .orb:nth-child(4) {
+  width: 180px; height: 180px; background: radial-gradient(circle, #1E88E5 0%, transparent 70%);
+  top: 60%; left: 10%; animation: orb1 18s ease-in-out infinite reverse;
+}
+#bg-anim .orb:nth-child(5) {
+  width: 220px; height: 220px; background: radial-gradient(circle, #42A5F5 0%, transparent 70%);
+  top: 10%; right: 15%; animation: orb3 22s ease-in-out infinite reverse;
+}
+@keyframes orb1 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(60px,-40px) scale(1.15); }
+  50% { transform: translate(-20px,60px) scale(0.9); }
+  75% { transform: translate(40px,30px) scale(1.1); }
+}
+@keyframes orb2 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  25% { transform: translate(-50px,30px) scale(1.1); }
+  50% { transform: translate(40px,-50px) scale(0.95); }
+  75% { transform: translate(-30px,-20px) scale(1.05); }
+}
+@keyframes orb3 {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(50px,40px) scale(1.2); }
+  66% { transform: translate(-40px,-30px) scale(0.85); }
+}
+
+/* Floating shapes */
+.bg-shape {
+  position: absolute; pointer-events: none; opacity: 0.06;
+  border: 2px solid white; animation: shapeDrift 25s linear infinite;
+}
+.bg-shape:nth-child(6) { width:40px; height:40px; top:20%; left:8%; border-radius:4px; transform:rotate(45deg); animation-duration:30s; }
+.bg-shape:nth-child(7) { width:25px; height:25px; top:70%; left:85%; border-radius:50%; animation-duration:22s; animation-delay:-8s; }
+.bg-shape:nth-child(8) { width:35px; height:35px; top:45%; left:92%; border-radius:4px; animation-duration:28s; animation-delay:-14s; }
+.bg-shape:nth-child(9) { width:20px; height:20px; top:85%; left:20%; border-radius:50%; animation-duration:35s; animation-delay:-5s; }
+.bg-shape:nth-child(10) { width:30px; height:30px; top:10%; left:70%; border-radius:4px; transform:rotate(30deg); animation-duration:26s; animation-delay:-12s; }
+@keyframes shapeDrift {
+  0% { transform: translateY(0) rotate(0deg); opacity:0.06; }
+  25% { opacity:0.1; }
+  50% { transform: translateY(-80px) rotate(180deg); opacity:0.06; }
+  75% { opacity:0.1; }
+  100% { transform: translateY(0) rotate(360deg); opacity:0.06; }
+}
+
+/* Theme-specific orb colors */
+body.kawaii #bg-anim .orb:nth-child(1) { background: radial-gradient(circle, #F48FB1 0%, transparent 70%); }
+body.kawaii #bg-anim .orb:nth-child(2) { background: radial-gradient(circle, #CE93D8 0%, transparent 70%); }
+body.kawaii #bg-anim .orb:nth-child(3) { background: radial-gradient(circle, #FFAB91 0%, transparent 70%); }
+body.kawaii #bg-anim .orb:nth-child(4) { background: radial-gradient(circle, #81D4FA 0%, transparent 70%); }
+body.kawaii #bg-anim .orb:nth-child(5) { background: radial-gradient(circle, #F8BBD0 0%, transparent 70%); }
+body.kawaii .bg-shape { border-color: #E91E63; opacity: 0.08; }
+
+body.cyber #bg-anim .orb { opacity: 0.12; }
+body.cyber #bg-anim .orb:nth-child(1) { background: radial-gradient(circle, #0ff 0%, transparent 70%); }
+body.cyber #bg-anim .orb:nth-child(2) { background: radial-gradient(circle, #f0f 0%, transparent 70%); }
+body.cyber #bg-anim .orb:nth-child(3) { background: radial-gradient(circle, #00e676 0%, transparent 70%); }
+body.cyber #bg-anim .orb:nth-child(4) { background: radial-gradient(circle, #d500f9 0%, transparent 70%); }
+body.cyber #bg-anim .orb:nth-child(5) { background: radial-gradient(circle, #0ff 0%, transparent 70%); }
+body.cyber .bg-shape { border-color: #0ff; opacity: 0.04; }
+
+body.moroccan #bg-anim .orb:nth-child(1) { background: radial-gradient(circle, #C17F3E 0%, transparent 70%); }
+body.moroccan #bg-anim .orb:nth-child(2) { background: radial-gradient(circle, #1B6B5A 0%, transparent 70%); }
+body.moroccan #bg-anim .orb:nth-child(3) { background: radial-gradient(circle, #2E4057 0%, transparent 70%); }
+body.moroccan #bg-anim .orb:nth-child(4) { background: radial-gradient(circle, #C75B39 0%, transparent 70%); }
+body.moroccan #bg-anim .orb:nth-child(5) { background: radial-gradient(circle, #D4944F 0%, transparent 70%); }
+body.moroccan .bg-shape { border-color: #C17F3E; opacity: 0.06; }
 </style>
 </head>
 <body>
-<div id="bg-anim"><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div id="bg-anim">
+  <div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div>
+  <div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div><div class="bg-shape"></div>
+</div>
 
 <div id="start-menu">
   <h1 id="menu-title">🧩 Block Puzzle</h1>

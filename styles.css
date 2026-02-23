@@ -97,7 +97,6 @@
 }
 
 /* ======== KAWAII THEME ======== */
-body.kawaii { background: #FFB6C1; }
 body.kawaii #start-menu { background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 40%, #E6E6FA 100%); }
 body.kawaii #board { background: #F3E5F5; border-radius: 16px; }
 body.kawaii .cell { border-radius: 10px; background: rgba(255,255,255,0.3); overflow: hidden; }
@@ -139,7 +138,6 @@ body.kawaii .cell.pink::after{content:'◕‿◕'} body.kawaii .cell.mint::after
 body.kawaii .cell.lilac::after{content:'◕ᴗ◕'} body.kawaii .cell.peach::after{content:'◕‿◕'} body.kawaii .cell.sky::after{content:'◠‿◠'}
 
 /* ======== CYBERPUNK THEME (enhanced) ======== */
-body.cyber { background: #0a0a1a; }
 body.cyber #start-menu { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 40%, #0d1b2a 100%); }
 body.cyber #start-menu h1 { color:#0ff; text-shadow:0 0 20px #0ff, 0 0 40px #0ff; animation: cyberFlicker 4s infinite; }
 @keyframes cyberFlicker {
@@ -231,7 +229,6 @@ body.cyber #clear-banner { text-shadow:0 0 30px #0ff, 0 0 60px #f0f, 0 4px 20px 
 body.cyber #screen-flash { background:#0ff; }
 
 /* ======== MOROCCAN ZELLIGE THEME ======== */
-body.moroccan { background: #F5E6D0; }
 body.moroccan #start-menu {
   background: linear-gradient(135deg, #2E4057 0%, #1B6B5A 40%, #C17F3E 100%);
 }
