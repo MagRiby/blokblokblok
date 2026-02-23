@@ -187,6 +187,8 @@ body.kawaii .piece-cell.filled.lilac { background: #CE93D8; box-shadow: inset 0 
 body.kawaii .piece-cell.filled.peach { background: #FFAB91; box-shadow: inset 0 -3px 0 #FF7043, inset 0 2px 0 #FFCCBC; }
 body.kawaii .piece-cell.filled.sky { background: #81D4FA; box-shadow: inset 0 -3px 0 #4FC3F7, inset 0 2px 0 #B3E5FC; }
 body.kawaii #score-display { color: #E91E63; background: rgba(255,255,255,0.4); }
+body.kawaii #score-display .trophy { display: none; }
+body.kawaii #score-display::before { content: '🌸'; margin-right: 4px; }
 body.kawaii #moves-display { color: #9C27B0; }
 body.kawaii #play-btn { background: #F48FB1; color: white; }
 body.kawaii #game-over-overlay { background: rgba(255,182,193,0.85); }
@@ -220,6 +222,112 @@ body.kawaii .cell.mint::after { content: '◠‿◠'; }
 body.kawaii .cell.lilac::after { content: '◕ᴗ◕'; }
 body.kawaii .cell.peach::after { content: '◕‿◕'; }
 body.kawaii .cell.sky::after { content: '◠‿◠'; }
+
+/* ---- CYBERPUNK THEME ---- */
+body.cyber {
+  background: #0a0a1a;
+}
+body.cyber #start-menu {
+  background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 40%, #0d1b2a 100%);
+}
+body.cyber #start-menu h1 {
+  color: #0ff;
+  text-shadow: 0 0 20px #0ff, 0 0 40px #0ff, 0 4px 20px rgba(0,0,0,0.5);
+}
+body.cyber #start-menu .subtitle { color: #f0f; }
+body.cyber #board {
+  background: #0d0d2b;
+  border: 1px solid rgba(0,255,255,0.15);
+  border-radius: 4px;
+  box-shadow: 0 0 30px rgba(0,255,255,0.08), inset 0 0 30px rgba(0,255,255,0.03);
+}
+body.cyber .cell {
+  border-radius: 2px;
+  background: rgba(0,255,255,0.04);
+  border: 1px solid rgba(0,255,255,0.06);
+  position: relative;
+}
+body.cyber .cell.neon-pink {
+  background: #ff0066;
+  box-shadow: inset 0 -3px 0 #cc0052, 0 0 8px rgba(255,0,102,0.5);
+  border-color: #ff3388;
+}
+body.cyber .cell.neon-cyan {
+  background: #00e5ff;
+  box-shadow: inset 0 -3px 0 #00b8d4, 0 0 8px rgba(0,229,255,0.5);
+  border-color: #33eeff;
+}
+body.cyber .cell.neon-yellow {
+  background: #eeff00;
+  box-shadow: inset 0 -3px 0 #c6d600, 0 0 8px rgba(238,255,0,0.5);
+  border-color: #f5ff33;
+}
+body.cyber .cell.neon-purple {
+  background: #d500f9;
+  box-shadow: inset 0 -3px 0 #aa00c7, 0 0 8px rgba(213,0,249,0.5);
+  border-color: #e040fb;
+}
+body.cyber .cell.neon-green {
+  background: #00e676;
+  box-shadow: inset 0 -3px 0 #00c853, 0 0 8px rgba(0,230,118,0.5);
+  border-color: #33eb91;
+}
+body.cyber .cell.preview {
+  background: rgba(0,255,255,0.15);
+  box-shadow: 0 0 10px rgba(0,255,255,0.3);
+}
+body.cyber .cell.clearing {
+  animation: cyberPop 0.9s ease-out forwards;
+}
+@keyframes cyberPop {
+  0% { transform: scale(1); opacity: 1; }
+  15% { transform: scale(1.3); background: #fff; box-shadow: 0 0 30px #0ff, 0 0 60px #f0f; }
+  40% { transform: scale(1.1); background: #0ff; box-shadow: 0 0 20px #0ff; }
+  100% { transform: scale(0); opacity: 0; }
+}
+body.cyber .piece-cell { border-radius: 2px; }
+body.cyber .piece-cell.filled.neon-pink { background: #ff0066; box-shadow: inset 0 -3px 0 #cc0052, 0 0 6px rgba(255,0,102,0.4); }
+body.cyber .piece-cell.filled.neon-cyan { background: #00e5ff; box-shadow: inset 0 -3px 0 #00b8d4, 0 0 6px rgba(0,229,255,0.4); }
+body.cyber .piece-cell.filled.neon-yellow { background: #eeff00; box-shadow: inset 0 -3px 0 #c6d600, 0 0 6px rgba(238,255,0,0.4); }
+body.cyber .piece-cell.filled.neon-purple { background: #d500f9; box-shadow: inset 0 -3px 0 #aa00c7, 0 0 6px rgba(213,0,249,0.4); }
+body.cyber .piece-cell.filled.neon-green { background: #00e676; box-shadow: inset 0 -3px 0 #00c853, 0 0 6px rgba(0,230,118,0.4); }
+body.cyber #score-display {
+  color: #0ff;
+  background: rgba(0,255,255,0.08);
+  border: 1px solid rgba(0,255,255,0.2);
+  text-shadow: 0 0 10px #0ff;
+}
+body.cyber #score-display .trophy { display: none; }
+body.cyber #score-display::before { content: '⚡'; margin-right: 4px; }
+body.cyber #moves-display { color: #f0f; text-shadow: 0 0 10px #f0f; }
+body.cyber #play-btn {
+  background: transparent;
+  color: #0ff;
+  border: 2px solid #0ff;
+  box-shadow: 0 0 20px rgba(0,255,255,0.3), inset 0 0 20px rgba(0,255,255,0.05);
+}
+body.cyber #play-btn:hover {
+  background: rgba(0,255,255,0.1);
+  box-shadow: 0 0 30px rgba(0,255,255,0.5);
+}
+body.cyber #game-over-overlay { background: rgba(10,10,26,0.9); }
+body.cyber #game-over-overlay h1 { color: #0ff; text-shadow: 0 0 20px #0ff; }
+body.cyber #game-over-overlay p { color: #f0f; text-shadow: 0 0 10px #f0f; }
+body.cyber #restart-btn {
+  background: transparent;
+  color: #f0f;
+  border: 2px solid #f0f;
+  box-shadow: 0 0 15px rgba(255,0,255,0.3);
+}
+body.cyber #restart-btn:hover { background: rgba(255,0,255,0.1); }
+body.cyber .menu-block.neon-pink { background: #ff0066; box-shadow: inset 0 -3px 0 #cc0052, 0 0 8px rgba(255,0,102,0.4); }
+body.cyber .menu-block.neon-cyan { background: #00e5ff; box-shadow: inset 0 -3px 0 #00b8d4, 0 0 8px rgba(0,229,255,0.4); }
+body.cyber .menu-block.neon-yellow { background: #eeff00; box-shadow: inset 0 -3px 0 #c6d600, 0 0 8px rgba(238,255,0,0.4); }
+body.cyber .menu-block.neon-purple { background: #d500f9; box-shadow: inset 0 -3px 0 #aa00c7, 0 0 8px rgba(213,0,249,0.4); }
+body.cyber .menu-block.empty { background: rgba(0,255,255,0.05); border: 1px solid rgba(0,255,255,0.08); }
+body.cyber .theme-btn.active { border-color: #0ff; background: rgba(0,255,255,0.1); }
+body.cyber #clear-banner { text-shadow: 0 0 30px #0ff, 0 0 60px #f0f, 0 4px 20px rgba(0,0,0,0.8); }
+body.cyber #screen-flash { background: #0ff; }
 </style>
 </head>
 <body>
@@ -232,6 +340,7 @@ body.kawaii .cell.sky::after { content: '◠‿◠'; }
   <div id="theme-picker">
     <button class="theme-btn active" data-theme="classic">🎮 Classic</button>
     <button class="theme-btn" data-theme="kawaii">🌸 Kawaii</button>
+    <button class="theme-btn" data-theme="cyber">⚡ Cyber</button>
   </div>
   <button id="play-btn">▶ PLAY</button>
   <div id="best-score-display"></div>

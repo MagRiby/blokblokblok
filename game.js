@@ -29,6 +29,22 @@ const THEMES = {
       peach: { bg: '#FFAB91', shadow: 'inset 0 -3px 0 #FF7043, inset 0 2px 0 #FFCCBC' },
       sky:   { bg: '#81D4FA', shadow: 'inset 0 -3px 0 #4FC3F7, inset 0 2px 0 #B3E5FC' }
     }
+  },
+  cyber: {
+    colors: ['neon-pink', 'neon-cyan', 'neon-yellow', 'neon-purple', 'neon-green'],
+    clearMessages: ['⚡ HACKED!', '💀 GLITCH!', '🔓 BREACHED!', '⚙️ OVERCLOCKED!', '🖥️ PWNED!', '💾 UPLOADED!', '🔥 WIRED!'],
+    comboMessages: ['⚡⚡ SYSTEM OVERLOAD!', '💀💀 MEGA HACK!', '🔓🔓 FIREWALL DOWN!', '🖥️🖥️ CRITICAL HIT!'],
+    particleColors: ['#0ff', '#f0f', '#eeff00', '#ff0066', '#00e676', '#d500f9', '#ffffff', '#00e5ff'],
+    menuPattern: ['neon-pink','neon-cyan','empty','neon-yellow','empty','neon-purple','neon-pink','empty','neon-cyan','empty','neon-green','neon-pink','neon-yellow','neon-cyan','empty','neon-purple'],
+    menuTitle: '⚡ CYBER BLOCKS',
+    menuSubtitle: 'Jack in. Clear lines. Go dark.',
+    ghostColors: {
+      'neon-pink':   { bg: '#ff0066', shadow: 'inset 0 -3px 0 #cc0052, 0 0 8px rgba(255,0,102,0.5)' },
+      'neon-cyan':   { bg: '#00e5ff', shadow: 'inset 0 -3px 0 #00b8d4, 0 0 8px rgba(0,229,255,0.5)' },
+      'neon-yellow': { bg: '#eeff00', shadow: 'inset 0 -3px 0 #c6d600, 0 0 8px rgba(238,255,0,0.5)' },
+      'neon-purple': { bg: '#d500f9', shadow: 'inset 0 -3px 0 #aa00c7, 0 0 8px rgba(213,0,249,0.5)' },
+      'neon-green':  { bg: '#00e676', shadow: 'inset 0 -3px 0 #00c853, 0 0 8px rgba(0,230,118,0.5)' }
+    }
   }
 };
 
@@ -139,8 +155,9 @@ function initMenu() {
 }
 
 function applyTheme() {
-  document.body.classList.remove('kawaii');
+  document.body.classList.remove('kawaii', 'cyber');
   if (currentTheme === 'kawaii') document.body.classList.add('kawaii');
+  if (currentTheme === 'cyber') document.body.classList.add('cyber');
 
   // Update theme button states
   document.querySelectorAll('.theme-btn').forEach(btn => {
