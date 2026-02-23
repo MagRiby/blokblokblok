@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html><body>
+<canvas id="c" width="180" height="180"></canvas>
+<script>
+const c = document.getElementById('c');
+const ctx = c.getContext('2d');
+const img = new Image();
+img.onload = () => {
+  ctx.drawImage(img, 0, 0, 180, 180);
+  const link = document.createElement('a');
+  link.download = 'apple-touch-icon.png';
+  link.href = c.toDataURL('image/png');
+  link.click();
+  document.body.innerHTML = '<h2>Icon downloaded! You can close this page.</h2>';
+};
+img.src = 'icon.svg';
+</script>
+</body></html>
