@@ -197,16 +197,59 @@ function randomColor() { return COLORS[Math.floor(Math.random() * COLORS.length)
 function randomShape() { return SHAPES[Math.floor(Math.random() * SHAPES.length)]; }
 
 // ---- PIECES ----
+
+// Shapes sorted roughly by size (small first) for smart spawning
+const SMALL_SHAPES = SHAPES.filter(s => {
+  let count = 0;
+  s.forEach(r => r.forEach(v => { if (v) count++; }));
+  return count <= 3;
+});
+
+function getEmptyCells() {
+  let count = 0;
+  for (let r = 0; r < GRID; r++)
+    for (let c = 0; c < GRID; c++)
+      if (!board[r][c]) count++;
+  return count;
+}
+
+function pickFittingShape() {
+  // Shuffle all shapes and find one that fits
+  const shuffled = [...SHAPES].sort(() => Math.random() - 0.5);
+  for (const shape of shuffled) {
+    if (canPlaceAnywhere(shape)) return shape;
+  }
+  // Nothing fits at all — return a single block as last resort
+  return [[1]];
+}
+
 function spawnPieces() {
   currentPieces = [];
   trayEl.innerHTML = '';
+
+  const empty = getEmptyCells();
+
   for (let i = 0; i < 3; i++) {
-    const piece = { shape: randomShape(), color: randomColor(), index: i };
+    let shape;
+    if (empty < 15) {
+      // Board is getting tight — only pick shapes that actually fit
+      shape = pickFittingShape();
+    } else if (empty < 25) {
+      // Moderate space — prefer smaller shapes but allow any that fit
+      const pool = Math.random() < 0.6 ? SMALL_SHAPES : SHAPES;
+      const shuffled = [...pool].sort(() => Math.random() - 0.5);
+      shape = shuffled.find(s => canPlaceAnywhere(s)) || pickFittingShape();
+    } else {
+      // Plenty of space — any shape
+      shape = randomShape();
+    }
+    const piece = { shape, color: randomColor(), index: i };
     currentPieces.push(piece);
     renderPiece(piece);
   }
-  // Delay game-over check to ensure board state is fully settled
-  setTimeout(() => checkGameOver(), 100);
+
+  // Check if any piece can actually be placed
+  checkGameOver();
 }
 
 function renderPiece(piece) {
@@ -469,23 +512,14 @@ function checkGameOver() {
   const remaining = currentPieces.filter(p => p !== null);
   if (remaining.length === 0) return;
 
-  // Double-check: test every remaining piece against every board position
-  const anyFits = remaining.some(p => {
-    for (let r = 0; r <= GRID - 1; r++) {
-      for (let c = 0; c <= GRID - 1; c++) {
-        if (canPlace(p.shape, r, c)) return true;
-      }
-    }
-    return false;
-  });
+  // Check if ANY remaining piece can fit ANYWHERE on the board
+  const anyFits = remaining.some(p => canPlaceAnywhere(p.shape));
 
   if (!anyFits) {
-    setTimeout(() => {
-      bestScore = Math.max(bestScore, score);
-      localStorage.setItem('blockPuzzleBest', bestScore);
-      finalScoreEl.textContent = score;
-      overlayEl.classList.add('show');
-    }, 500);
+    bestScore = Math.max(bestScore, score);
+    localStorage.setItem('blockPuzzleBest', bestScore);
+    finalScoreEl.textContent = score;
+    overlayEl.classList.add('show');
   }
 }
 
