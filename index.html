@@ -111,15 +111,128 @@ body {
   padding: 12px;
 }
 #game-container.active { display: flex; }
+
+/* ---- THEME PICKER ---- */
+#theme-picker {
+  display: flex;
+  gap: 12px;
+}
+.theme-btn {
+  background: rgba(255,255,255,0.15);
+  color: white;
+  border: 2px solid transparent;
+  padding: 10px 22px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.theme-btn:hover { background: rgba(255,255,255,0.25); }
+.theme-btn.active { border-color: #FFD600; background: rgba(255,214,0,0.2); }
+
+/* ---- KAWAII THEME ---- */
+body.kawaii {
+  background: #FFB6C1;
+}
+body.kawaii #start-menu {
+  background: linear-gradient(135deg, #FFB6C1 0%, #DDA0DD 40%, #E6E6FA 100%);
+}
+body.kawaii #board {
+  background: #F3E5F5;
+  border-radius: 16px;
+}
+body.kawaii .cell {
+  border-radius: 10px;
+  background: rgba(255,255,255,0.3);
+  position: relative;
+  overflow: hidden;
+}
+body.kawaii .cell.pink {
+  background: #F48FB1;
+  box-shadow: inset 0 -3px 0 #E91E63, inset 0 2px 0 #F8BBD0;
+}
+body.kawaii .cell.mint {
+  background: #80CBC4;
+  box-shadow: inset 0 -3px 0 #4DB6AC, inset 0 2px 0 #B2DFDB;
+}
+body.kawaii .cell.lilac {
+  background: #CE93D8;
+  box-shadow: inset 0 -3px 0 #AB47BC, inset 0 2px 0 #E1BEE7;
+}
+body.kawaii .cell.peach {
+  background: #FFAB91;
+  box-shadow: inset 0 -3px 0 #FF7043, inset 0 2px 0 #FFCCBC;
+}
+body.kawaii .cell.sky {
+  background: #81D4FA;
+  box-shadow: inset 0 -3px 0 #4FC3F7, inset 0 2px 0 #B3E5FC;
+}
+body.kawaii .cell.preview {
+  background: rgba(255,255,255,0.45);
+}
+body.kawaii .cell.clearing {
+  animation: kawaiiPop 0.9s ease-out forwards;
+}
+@keyframes kawaiiPop {
+  0% { transform: scale(1) rotate(0); opacity: 1; }
+  20% { transform: scale(1.3) rotate(5deg); background: #FFF9C4; box-shadow: 0 0 20px #FFF176; }
+  50% { transform: scale(1.1) rotate(-3deg); background: #F8BBD0; }
+  100% { transform: scale(0) rotate(15deg); opacity: 0; }
+}
+body.kawaii .piece-cell { border-radius: 10px; }
+body.kawaii .piece-cell.filled.pink { background: #F48FB1; box-shadow: inset 0 -3px 0 #E91E63, inset 0 2px 0 #F8BBD0; }
+body.kawaii .piece-cell.filled.mint { background: #80CBC4; box-shadow: inset 0 -3px 0 #4DB6AC, inset 0 2px 0 #B2DFDB; }
+body.kawaii .piece-cell.filled.lilac { background: #CE93D8; box-shadow: inset 0 -3px 0 #AB47BC, inset 0 2px 0 #E1BEE7; }
+body.kawaii .piece-cell.filled.peach { background: #FFAB91; box-shadow: inset 0 -3px 0 #FF7043, inset 0 2px 0 #FFCCBC; }
+body.kawaii .piece-cell.filled.sky { background: #81D4FA; box-shadow: inset 0 -3px 0 #4FC3F7, inset 0 2px 0 #B3E5FC; }
+body.kawaii #score-display { color: #E91E63; background: rgba(255,255,255,0.4); }
+body.kawaii #moves-display { color: #9C27B0; }
+body.kawaii #play-btn { background: #F48FB1; color: white; }
+body.kawaii #game-over-overlay { background: rgba(255,182,193,0.85); }
+body.kawaii #game-over-overlay h1 { color: #9C27B0; }
+body.kawaii #game-over-overlay p { color: #E91E63; }
+body.kawaii #restart-btn { background: #F48FB1; color: white; }
+body.kawaii .menu-block.pink { background: #F48FB1; box-shadow: inset 0 -3px 0 #E91E63; }
+body.kawaii .menu-block.mint { background: #80CBC4; box-shadow: inset 0 -3px 0 #4DB6AC; }
+body.kawaii .menu-block.lilac { background: #CE93D8; box-shadow: inset 0 -3px 0 #AB47BC; }
+body.kawaii .menu-block.peach { background: #FFAB91; box-shadow: inset 0 -3px 0 #FF7043; }
+body.kawaii .menu-block.empty { background: rgba(255,255,255,0.2); }
+
+/* Kawaii faces on cells */
+body.kawaii .cell.pink::after,
+body.kawaii .cell.mint::after,
+body.kawaii .cell.lilac::after,
+body.kawaii .cell.peach::after,
+body.kawaii .cell.sky::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60%;
+  line-height: 1;
+  pointer-events: none;
+}
+body.kawaii .cell.pink::after { content: '◕‿◕'; }
+body.kawaii .cell.mint::after { content: '◠‿◠'; }
+body.kawaii .cell.lilac::after { content: '◕ᴗ◕'; }
+body.kawaii .cell.peach::after { content: '◕‿◕'; }
+body.kawaii .cell.sky::after { content: '◠‿◠'; }
 </style>
 </head>
 <body>
 
 <!-- START MENU -->
 <div id="start-menu">
-  <h1>🧩 Block Puzzle</h1>
-  <p class="subtitle">Fill lines. Score big.</p>
+  <h1 id="menu-title">🧩 Block Puzzle</h1>
+  <p class="subtitle" id="menu-subtitle">Fill lines. Score big.</p>
   <div class="menu-grid" id="menu-grid"></div>
+  <div id="theme-picker">
+    <button class="theme-btn active" data-theme="classic">🎮 Classic</button>
+    <button class="theme-btn" data-theme="kawaii">🌸 Kawaii</button>
+  </div>
   <button id="play-btn">▶ PLAY</button>
   <div id="best-score-display"></div>
 </div>

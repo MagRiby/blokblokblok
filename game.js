@@ -1,5 +1,41 @@
 const GRID = 8;
-const COLORS = ['red', 'green', 'blue'];
+const THEMES = {
+  classic: {
+    colors: ['red', 'green', 'blue'],
+    clearMessages: ['✨ Nice!', '🔥 Great!', '💥 Awesome!', '⚡ Sweet!', '🌟 Brilliant!', '🎯 Perfect!', '💎 Amazing!'],
+    comboMessages: ['🔥🔥 COMBO!', '💥💥 DOUBLE!', '⚡⚡ MULTI!', '🌟🌟 MEGA!'],
+    particleColors: ['#FFD600', '#FF5722', '#E91E63', '#00E676', '#2979FF', '#FFFFFF', '#FF9100', '#AA00FF'],
+    menuPattern: ['red','green','empty','blue','empty','red','green','empty','green','empty','blue','red','blue','red','empty','green'],
+    menuTitle: '🧩 Block Puzzle',
+    menuSubtitle: 'Fill lines. Score big.',
+    ghostColors: {
+      red:   { bg: '#F44336', shadow: 'inset 0 -3px 0 #C62828, inset 0 2px 0 #EF5350' },
+      green: { bg: '#4CAF50', shadow: 'inset 0 -3px 0 #2E7D32, inset 0 2px 0 #66BB6A' },
+      blue:  { bg: '#2196F3', shadow: 'inset 0 -3px 0 #1565C0, inset 0 2px 0 #42A5F5' }
+    }
+  },
+  kawaii: {
+    colors: ['pink', 'mint', 'lilac', 'peach', 'sky'],
+    clearMessages: ['💖 Yay!', '🌸 So cute!', '✿ Lovely!', '🍡 Sweet!', '🌈 Pretty!', '⭐ Sparkle!', '🎀 Adorable!'],
+    comboMessages: ['💖💖 SUGOI!', '🌸🌸 KAWAII!', '✿✿ AMAZING!', '🌈🌈 MAGICAL!'],
+    particleColors: ['#F48FB1', '#80CBC4', '#CE93D8', '#FFAB91', '#81D4FA', '#FFF9C4', '#F8BBD0', '#B2DFDB'],
+    menuPattern: ['pink','mint','empty','lilac','empty','peach','pink','empty','mint','empty','lilac','peach','lilac','pink','empty','mint'],
+    menuTitle: '🌸 Kawaii Blocks',
+    menuSubtitle: 'So cute! Fill lines! ✿',
+    ghostColors: {
+      pink:  { bg: '#F48FB1', shadow: 'inset 0 -3px 0 #E91E63, inset 0 2px 0 #F8BBD0' },
+      mint:  { bg: '#80CBC4', shadow: 'inset 0 -3px 0 #4DB6AC, inset 0 2px 0 #B2DFDB' },
+      lilac: { bg: '#CE93D8', shadow: 'inset 0 -3px 0 #AB47BC, inset 0 2px 0 #E1BEE7' },
+      peach: { bg: '#FFAB91', shadow: 'inset 0 -3px 0 #FF7043, inset 0 2px 0 #FFCCBC' },
+      sky:   { bg: '#81D4FA', shadow: 'inset 0 -3px 0 #4FC3F7, inset 0 2px 0 #B3E5FC' }
+    }
+  }
+};
+
+let currentTheme = 'classic';
+function getTheme() { return THEMES[currentTheme]; }
+
+const COLORS_CLASSIC = ['red', 'green', 'blue'];
 const SHAPES = [
   [[1]],
   [[1,1]], [[1],[1]],
@@ -13,13 +49,8 @@ const SHAPES = [
   [[1,1,1,1,1]], [[1],[1],[1],[1],[1]],
   [[1,1,0],[0,1,1]], [[0,1,1],[1,1,0]],
 ];
-const CLEAR_MESSAGES = [
-  '✨ Nice!', '🔥 Great!', '💥 Awesome!', '⚡ Sweet!',
-  '🌟 Brilliant!', '🎯 Perfect!', '💎 Amazing!'
-];
-const COMBO_MESSAGES = [
-  '🔥🔥 COMBO!', '💥💥 DOUBLE!', '⚡⚡ MULTI!', '🌟🌟 MEGA!'
-];
+const CLEAR_MESSAGES = ['✨ Nice!', '🔥 Great!', '💥 Awesome!', '⚡ Sweet!', '🌟 Brilliant!', '🎯 Perfect!', '💎 Amazing!'];
+const COMBO_MESSAGES = ['🔥🔥 COMBO!', '💥💥 DOUBLE!', '⚡⚡ MULTI!', '🌟🌟 MEGA!'];
 
 let board = [], score = 0, moves = 0, bestScore = 0;
 let currentPieces = [], dragPiece = null, dragGhost = null;
@@ -102,21 +133,43 @@ function updateParticles() {
 function initMenu() {
   bestScore = parseInt(localStorage.getItem('blockPuzzleBest') || '0');
   if (bestScore > 0) bestScoreDisplay.textContent = `Best: ${bestScore}`;
+  currentTheme = localStorage.getItem('blockPuzzleTheme') || 'classic';
+  applyTheme();
+  updateMenuVisuals();
+}
 
-  // Decorative grid
+function applyTheme() {
+  document.body.classList.remove('kawaii');
+  if (currentTheme === 'kawaii') document.body.classList.add('kawaii');
+
+  // Update theme button states
+  document.querySelectorAll('.theme-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === currentTheme);
+  });
+}
+
+function updateMenuVisuals() {
+  const theme = getTheme();
+  document.getElementById('menu-title').textContent = theme.menuTitle;
+  document.getElementById('menu-subtitle').textContent = theme.menuSubtitle;
+
   menuGrid.innerHTML = '';
-  const pattern = [
-    'red','green','empty','blue',
-    'empty','red','green','empty',
-    'green','empty','blue','red',
-    'blue','red','empty','green'
-  ];
-  pattern.forEach(c => {
+  theme.menuPattern.forEach(c => {
     const b = document.createElement('div');
     b.className = 'menu-block ' + c;
     menuGrid.appendChild(b);
   });
 }
+
+// Theme picker
+document.querySelectorAll('.theme-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    currentTheme = btn.dataset.theme;
+    localStorage.setItem('blockPuzzleTheme', currentTheme);
+    applyTheme();
+    updateMenuVisuals();
+  });
+});
 
 playBtn.addEventListener('click', startGame);
 restartBtn.addEventListener('click', () => {
@@ -160,7 +213,7 @@ function prefillBoard() {
     const r = Math.floor(Math.random() * GRID);
     const c = Math.floor(Math.random() * GRID);
     if (!board[r][c]) {
-      board[r][c] = COLORS[Math.floor(Math.random() * COLORS.length)];
+      board[r][c] = randomColor();
       placed++;
     }
     attempts++;
@@ -193,7 +246,10 @@ function updateScore() {
   movesEl.textContent = moves;
 }
 
-function randomColor() { return COLORS[Math.floor(Math.random() * COLORS.length)]; }
+function randomColor() {
+  const colors = getTheme().colors;
+  return colors[Math.floor(Math.random() * colors.length)];
+}
 function randomShape() { return SHAPES[Math.floor(Math.random() * SHAPES.length)]; }
 
 // ---- PIECES ----
@@ -282,12 +338,6 @@ function refreshTray() {
 }
 
 // ---- DRAG & DROP ----
-const COLOR_STYLES = {
-  red:   { bg: '#F44336', shadow: 'inset 0 -3px 0 #C62828, inset 0 2px 0 #EF5350' },
-  green: { bg: '#4CAF50', shadow: 'inset 0 -3px 0 #2E7D32, inset 0 2px 0 #66BB6A' },
-  blue:  { bg: '#2196F3', shadow: 'inset 0 -3px 0 #1565C0, inset 0 2px 0 #42A5F5' }
-};
-
 function getCellSize() {
   return (boardEl.getBoundingClientRect().width - 8) / GRID;
 }
@@ -297,6 +347,7 @@ function startDrag(e, piece) {
   dragPiece = piece;
   const touch = e.touches ? e.touches[0] : e;
   const cellSize = getCellSize();
+  const ghostColors = getTheme().ghostColors;
 
   dragGhost = document.createElement('div');
   Object.assign(dragGhost.style, {
@@ -309,10 +360,11 @@ function startDrag(e, piece) {
   for (let r = 0; r < piece.shape.length; r++) {
     for (let c = 0; c < piece.shape[0].length; c++) {
       const cell = document.createElement('div');
-      Object.assign(cell.style, { borderRadius: '4px', width: cellSize+'px', height: cellSize+'px' });
-      if (piece.shape[r][c]) {
-        cell.style.background = COLOR_STYLES[piece.color].bg;
-        cell.style.boxShadow = COLOR_STYLES[piece.color].shadow;
+      const radius = currentTheme === 'kawaii' ? '10px' : '4px';
+      Object.assign(cell.style, { borderRadius: radius, width: cellSize+'px', height: cellSize+'px' });
+      if (piece.shape[r][c] && ghostColors[piece.color]) {
+        cell.style.background = ghostColors[piece.color].bg;
+        cell.style.boxShadow = ghostColors[piece.color].shadow;
         cell.style.opacity = '0.8';
       }
       dragGhost.appendChild(cell);
@@ -473,7 +525,7 @@ function clearLines() {
   });
 
   // Particles
-  const particleColors = ['#FFD600', '#FF5722', '#E91E63', '#00E676', '#2979FF', '#FFFFFF', '#FF9100', '#AA00FF'];
+  const particleColors = getTheme().particleColors;
   toClear.forEach(idx => {
     const rect = cells[idx].getBoundingClientRect();
     spawnParticles(rect.left + rect.width/2, rect.top + rect.height/2, 12, particleColors);
@@ -496,7 +548,8 @@ function clearLines() {
   flash.classList.add('flash');
 
   // Banner
-  const msgs = totalLines > 1 ? COMBO_MESSAGES : CLEAR_MESSAGES;
+  const theme = getTheme();
+  const msgs = totalLines > 1 ? theme.comboMessages : theme.clearMessages;
   clearBanner.textContent = msgs[Math.floor(Math.random() * msgs.length)];
   clearBanner.classList.remove('show');
   void clearBanner.offsetWidth;
