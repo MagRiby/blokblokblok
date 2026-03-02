@@ -269,6 +269,10 @@ restartBtn.addEventListener('click', () => {
   overlayEl.classList.remove('show');
   startGame();
 });
+document.getElementById('back-btn').addEventListener('click', () => {
+  sfxClick();
+  showMenu();
+});
 
 function startGame() {
   startMenu.classList.add('hidden');
@@ -278,11 +282,14 @@ function startGame() {
 }
 
 function showMenu() {
+  cleanupDrag();
   bestScore = Math.max(bestScore, score);
   localStorage.setItem('blockPuzzleBest', bestScore);
   if (bestScore > 0) bestScoreDisplay.textContent = `Best: ${bestScore}`;
+  overlayEl.classList.remove('show');
   gameContainer.classList.remove('active');
   startMenu.classList.remove('hidden');
+  updateMenuVisuals();
 }
 
 // ---- GAME INIT ----
@@ -435,10 +442,26 @@ function getCellSize() {
   return (boardEl.getBoundingClientRect().width - 8) / GRID;
 }
 
+function cleanupDrag() {
+  clearPreview();
+  if (dragGhost) { dragGhost.remove(); dragGhost = null; }
+  trayEl.querySelectorAll('.piece-container').forEach(c => c.classList.remove('dragging'));
+  dragPiece = null;
+  document.removeEventListener('mousemove', onDrag);
+  document.removeEventListener('mouseup', endDrag);
+  document.removeEventListener('touchmove', onDrag);
+  document.removeEventListener('touchend', endDrag);
+  document.removeEventListener('touchcancel', endDrag);
+}
+
 function startDrag(e, piece) {
   e.preventDefault();
+  // Kill any existing drag first (rapid taps / multi-touch)
+  if (dragPiece || dragGhost) cleanupDrag();
+
   dragPiece = piece;
   const touch = e.touches ? e.touches[0] : e;
+  if (!touch) return;
   const cellSize = getCellSize();
   const ghostColors = getTheme().ghostColors;
 
@@ -477,6 +500,7 @@ function startDrag(e, piece) {
   document.addEventListener('mouseup', endDrag);
   document.addEventListener('touchmove', onDrag, { passive: false });
   document.addEventListener('touchend', endDrag);
+  document.addEventListener('touchcancel', endDrag);
 }
 
 function moveGhost(cx, cy) {
@@ -517,13 +541,7 @@ function endDrag() {
       placePiece(dragPiece, pos.row, pos.col);
     }
   }
-  if (dragGhost) { dragGhost.remove(); dragGhost = null; }
-  trayEl.querySelectorAll('.piece-container').forEach(c => c.classList.remove('dragging'));
-  dragPiece = null;
-  document.removeEventListener('mousemove', onDrag);
-  document.removeEventListener('mouseup', endDrag);
-  document.removeEventListener('touchmove', onDrag);
-  document.removeEventListener('touchend', endDrag);
+  cleanupDrag();
 }
 
 // ---- BOARD LOGIC ----
